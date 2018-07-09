@@ -166,14 +166,14 @@ IvendeurOccasionnelChocoTer, Labellise{
 		double[] prixMin= { 100000.0 , 100000.0 , 100000.0 } ;
 		int[] min= {-1,-1,-1};
 		int[] max= {-1,-1,-1};
-		for (int i=0;i<this.contratFeveEnCours.size();i++) {
-			int qualite=this.contratFeveEnCours.get(i).getQualite();
-			if (this.contratFeveEnCours.get(i).getOffrePublique_Prix()<prixMin[qualite]) {
-				prixMin[qualite]=this.contratFeveEnCours.get(i).getOffrePublique_Prix();
+		for (int i=0;i<this.getContratFeveEnCours().size();i++) {
+			int qualite=this.getContratFeveEnCours().get(i).getQualite();
+			if (this.getContratFeveEnCours().get(i).getOffrePublique_Prix()<prixMin[qualite]) {
+				prixMin[qualite]=this.getContratFeveEnCours().get(i).getOffrePublique_Prix();
 				if (min[qualite]!=-1) {
 					max[qualite]=i;
 				}
-				min[qualite]=this.contratFeveEnCours.get(i).getQualite();
+				min[qualite]=this.getContratFeveEnCours().get(i).getQualite();
 			}
 		}
 		for (int j=0;j<3;j++) {

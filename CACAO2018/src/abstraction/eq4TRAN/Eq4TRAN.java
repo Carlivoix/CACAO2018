@@ -193,8 +193,7 @@ public class Eq4TRAN implements Acteur {
 		this.contratFevesEnCours=new ArrayList<ContratFeveV3>();
 		for(int i=0;i<3;i++) {
 			this.contratFevesEnCours.add(new ContratFeveV3((IAcheteurFeveV4)this.PME1 , "Eq2PROD" , i )) ;
-			this.contratFevesEnCours.add(new ContratFeveV3((IAcheteurFeveV4)this.PME2, "Eq3PROD",i));
-			
+			this.contratFevesEnCours.add(new ContratFeveV3((IAcheteurFeveV4)this.PME2, "Eq3PROD",i));	
 		}
 	
 		//On initialise les indicateurs à 1000(arbitraire)

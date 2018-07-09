@@ -2,6 +2,7 @@ package abstraction.eq4TRAN;
 
 import abstraction.eq3PROD.echangesProdTransfo.ContratFeveV3;
 import abstraction.eq3PROD.echangesProdTransfo.IAcheteurFeveV4;
+import abstraction.eq4TRAN.DISTFictif.DISTFictif;
 import abstraction.eq4TRAN.VendeurChoco.Vendeur;
 import abstraction.eq5TRAN.Eq5TRAN;
 import abstraction.eq7TRAN.echangeTRANTRAN.ContratPoudre;
@@ -252,6 +253,7 @@ public class Eq4TRAN implements Acteur {
 		Monde.LE_MONDE.ajouterJournal(this.PME2.getJournalSousActeur());
 		Monde.LE_MONDE.ajouterJournal(this.PME3.getJournalSousActeur());
 		
+		new DISTFictif();
 	}
 
 	@Override

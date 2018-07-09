@@ -278,6 +278,7 @@ IvendeurOccasionnelChocoTer, Labellise{
 			this.getJournalSousActeur().ajouter("L'équipe 4 a vendu : " + livraison.get(0).get(i) + " de " + Marchandises.getMarchandise(i+1) +" à "+ "Eq6DIST" + " pour "+ vendeur.getPrix().getPrixProduit(livraison.get(0).get(i), i+1));
 			int quantite = getQuantite(i+1)-livraison.get(0).get(i)-livraison.get(1).get(i);
 			setQuantite(i+1,quantite);
+			getStock().set(i, quantite);
 		}
 		double s = 0.0;
 		//On calcule la valeur du chiffre d'affaire généré par cette livraison
@@ -397,9 +398,10 @@ IvendeurOccasionnelChocoTer, Labellise{
 	public void envoyerReponseTer(Acteur acteur, int quantite, int qualite, double prix) {
 			double ancienSolde = this.solde.getValeur() ; 
 			this.solde.setValeur(this, ancienSolde + prix);
-			double ancienStock = this.Stocks.get(qualite-1).getValeur() ; 
+			int ancienStock = (int)this.Stocks.get(qualite-1).getValeur() ; 
 			this.Stocks.get(qualite-1).setValeur(this, ancienStock - quantite );
-			this.getJournalSousActeur().ajouter(this.getNom()+" a vendu " + quantite + "de qualité " + qualite+ " à " + acteur.getNom());
+			this.getStock().set(qualite-1, ancienStock-quantite);
+			this.getJournalSousActeur().ajouter(this.getNom()+" a vendu " + quantite + "de qualité " + Marchandises.getQualite(qualite)+ " à " + acteur.getNom());
 		
 	}
 	

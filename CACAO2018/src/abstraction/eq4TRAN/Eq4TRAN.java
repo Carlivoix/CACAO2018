@@ -206,7 +206,7 @@ public class Eq4TRAN implements Acteur {
 		stockTabMQ_Eq4 = new Indicateur("Eq4 - stockTabMQ",this,this.PME1.getStock().get(2)+this.PME2.getStock().get(2)+this.PME3.getStock().get(2)) ;
 		stockTabHQ_Eq4 = new Indicateur("Eq4 - stockTabHQ",this,this.PME1.getStock().get(3)+this.PME2.getStock().get(3)+this.PME3.getStock().get(3)) ;
 		stockChocMQ_Eq4 = new Indicateur("Eq4 - stockChocMQ",this,this.PME1.getStock().get(4)+this.PME2.getStock().get(4)+this.PME3.getStock().get(4)) ;
-		stockChocHQ_Eq4 = new Indicateur("Eq4 - stockTabHQ",this,this.PME1.getStock().get(5)+this.PME2.getStock().get(5)+this.PME3.getStock().get(5)) ;
+		stockChocHQ_Eq4 = new Indicateur("Eq4 - stockChocHQ",this,this.PME1.getStock().get(5)+this.PME2.getStock().get(5)+this.PME3.getStock().get(5)) ;
 		prodTabBQ_Eq4 = new Indicateur("Eq4 - prodTabBQ",this,this.PME1.getProduction().get(1).getValeur()+this.PME2.getProduction().get(1).getValeur()+this.PME3.getProduction().get(1).getValeur()) ;
 		prodTabMQ_Eq4 = new Indicateur("Eq4 - prodTabMQ",this,this.PME1.getProduction().get(2).getValeur()+this.PME2.getProduction().get(2).getValeur()+this.PME3.getProduction().get(2).getValeur()) ;
 		prodTabHQ_Eq4 = new Indicateur("Eq4 - prodTabHQ",this,this.PME1.getProduction().get(3).getValeur()+this.PME2.getProduction().get(3).getValeur()+this.PME3.getProduction().get(3).getValeur()) ;
@@ -342,23 +342,29 @@ public class Eq4TRAN implements Acteur {
 							double ancienStockChoc = acteur.getStocks().get(j).getValeur() ;
 							acteur.getStocks().get(j).setValeur(acteur, ancienStockChoc + acteur.getProduction().get(j).getValeur());
 							solde.setValeur(acteur, solde.getValeur()-contratPoudreEnCours.get(i).getPrix()*contratPoudreEnCours.get(i).getQuantite());
-		
 						} 
 				}
 			} 
 	
 			// On se transforme désormais en vendeur, le réapprovisionnement de nos stocks ayant été effectué
-			// Nous allons alors vendre des fèves aux distributeurs par l'intermédiaire du MarchéChoco()
+			// Nous allons alors vendre des marchandises aux distributeurs par l'intermédiaire du MarchéChoco()
+				
 			ArrayList<Integer> stocks = new ArrayList<>();
 			stocks.add(0); // Nono met l'indicateur de stock ChocBQ
 			for(int k=1;k<6;k++) {
-				stocks.add((int)acteur.getStocks().get(k).getValeur());
+				stocks.add(acteur.getStock().get(k));
 			}
 			acteur.setVendeur(new Vendeur(stocks));
 			}	
 			
 		}
 
+		for(int i=0;i<this.Stocks.size();i++) {
+			Stocks.get(i).setValeur(Eq4TRAN, this.PME1.getStocks().get(i).getValeur()+this.PME2.getStocks().get(i).getValeur()+this.PME3.getStocks().get(i).getValeur());
+		}
+		
+		this.solde.setValeur(Eq4TRAN, this.PME1.getSolde().getValeur()+this.PME2.getSolde().getValeur()+this.PME3.getSolde().getValeur());
+		
 		// On met à jour le journal des trois acteurs
 		journalEq4(this.PME1);
 		journalEq4(this.PME2);

@@ -97,11 +97,13 @@ public class Vendeur implements IVendeurChocoBis{
 			if(commande1==null) {
 				if(commande2.get(i)+commande3.get(i)>getQte(i+1)) {
 					commande3.set(i, 0);
+					commande2.set(i, getQte(i+1));
 				}
 			}
 			if(commande2==null) {
 				if(commande1.get(i)+commande3.get(i)>getQte(i+1)) {
 					commande3.set(i, 0);
+					commande1.set(i, getQte(i+1));
 				}
 			}
 			if(commande3==null) {

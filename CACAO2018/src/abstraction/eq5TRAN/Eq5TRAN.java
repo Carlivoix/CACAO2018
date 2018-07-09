@@ -31,10 +31,6 @@ import static abstraction.eq5TRAN.util.Marchandises.*;
  * TODO LIST
 
  * - Systeme de fidelite client/fournisseur
-
-
- 
-
  * - Constante mutlipicatrice a droite / ecouler stocks - reste du monde
  */
 public class Eq5TRAN implements Acteur, IAcheteurPoudre, IVendeurPoudre, IvendeurOccasionnelChocoTer, IAcheteurFeveV4, IVendeurChocoBis {
@@ -669,6 +665,9 @@ public class Eq5TRAN implements Acteur, IAcheteurPoudre, IVendeurPoudre, Ivendeu
         return new GPrix2(intervalles, prixAssocies);
     }
 
+    /**
+     * Thomas Schillaci
+     */
     @Override
     public ArrayList<ArrayList<Integer>> getLivraison(ArrayList<ArrayList<Integer>> commandes) {
         ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
@@ -707,6 +706,7 @@ public class Eq5TRAN implements Acteur, IAcheteurPoudre, IVendeurPoudre, Ivendeu
         String[] produits = new String[]{"","FRIANDISES_MQ","","TABLETTES_BQ","TABLETTES_MQ","TABLETTES_HQ"};
 
         for(int i=0; i<6; i++) {
+            if(i==0 || i==2) continue;
             double prixAssocie = prix[Marchandises.getIndex(produits[i])].getValeur() / 1_000_000 * 0.2;
             if(eq1.get(i)!=0) {
                 journal.ajouter("L'eq5 vient de vendre " + eq1.get(i) + " " + produits[i] + " pour " + prixAssocie * eq1.get(i) + "€");
@@ -724,4 +724,5 @@ public class Eq5TRAN implements Acteur, IAcheteurPoudre, IVendeurPoudre, Ivendeu
 
         return res;
     }
+
 }

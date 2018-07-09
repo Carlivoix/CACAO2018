@@ -199,7 +199,10 @@ IvendeurOccasionnelChocoTer, Labellise{
 	 */
 	@Override
 	public void sendOffreFinaleV3(List<ContratFeveV3> offreFinale) {
-		this.contratFeveEnCours = offreFinale ; 
+		this.contratFeveEnCours = offreFinale ;
+		for (ContratFeveV3 c: offreFinale) {
+			c.setReponse(true);
+		}
 	}
 	
 

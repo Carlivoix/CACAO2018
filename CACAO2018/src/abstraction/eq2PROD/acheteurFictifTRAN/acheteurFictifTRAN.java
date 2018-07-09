@@ -12,7 +12,7 @@ public class acheteurFictifTRAN implements Acteur, IAcheteurFeveV4 {
 /* VARIABLES D'INSTANCE */
 	private List<ContratFeveV3> offreFinale;
 	private List<ContratFeveV3> contratPrecedent;
-	public final static double pond = 0.4;
+	public final static double pond = 4.0;
 	
 	public acheteurFictifTRAN() {
 		this.offreFinale = new ArrayList<>();

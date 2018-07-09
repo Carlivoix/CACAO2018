@@ -30,6 +30,7 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 	private Indicateur soldejournal;
 	private Indicateur meteoI;
 	private Indicateur instabiliteI;
+	private Indicateur coeffstockI;
 	private int totalVenteQB;
 	private int totalVenteQM;
 	public final static double ponderation = 0.1;
@@ -73,18 +74,20 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 		this.soldejournal = new Indicateur("Solde de"+getNomEq(), this, getSolde());
 		this.meteoI = new Indicateur("Coefficient meteo de"+getNomEq(),this,getCoeffMeteo());
 		this.instabiliteI = new Indicateur("Coefficient d'instabilite de"+getNomEq(),this,getCoeffInstabilite());
+		this.coeffstockI = new Indicateur("Coefficient impactant le stock de"+getNomEq(),this,getCoeffStock());
 		setStockQBas(indicateurQB);
 		setStockQMoy(indicateurQM);
 		
 		setJournal(new Journal("Journal de"+getNomEq()));
 		setJournalOccasionel(new Journal("Journal de ventes occasionnelles de"+getNomEq()));
 		Monde.LE_MONDE.ajouterJournal(getJournal());
-		Monde.LE_MONDE.ajouterJournal(getJournalOccasionel());
+		Monde.LE_MONDE.ajouterJournal(getJournalOccasionel());		
 		Monde.LE_MONDE.ajouterIndicateur(getStockQBas());
 		Monde.LE_MONDE.ajouterIndicateur(getStockQMoy());
 		Monde.LE_MONDE.ajouterIndicateur(getSoldeJournal());
 		Monde.LE_MONDE.ajouterIndicateur(getMeteoI());
 		Monde.LE_MONDE.ajouterIndicateur(getInstabiliteI());
+		Monde.LE_MONDE.ajouterIndicateur(getCoeffStockI());
 		
 		Monde.LE_MONDE.ajouterActeur(new acheteurFictifTRAN());
 		this.nomEq = "Eq2PROD";
@@ -199,7 +202,7 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 	}
 	/* Alexandre Bigot + Guillaume Sallé*/
 	public double getPrix() {
-		return prixMarche()*getCoeffSolde() ;
+		return prixMarche()*getCoeffSolde()*1.06 ;
 	}
 	/* Alexandre Bigot + Guillaume Sallé */
 	public double getCoeffMeteo() {
@@ -301,9 +304,13 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 	public double coeffFinal() {
 		double c = 0;
 		for (int i=0; i<10 ; i++) {
-			c = c + getCoeffDeficitProd(i);
+			c = c + getCoeffDeficitProd(i)*partProd[i];
 		}
-		return c ;
+		if (1-c>0.2) {
+			return 1-c;
+		} else {
+			return 0.2;
+		}
 	} 
 	
 	/* Alexandre Bigot + Guillaume Sallé */
@@ -387,6 +394,9 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 	public Indicateur getInstabiliteI() {
 		return this.instabiliteI;
 	}
+	public Indicateur getCoeffStockI() {
+		return this.coeffstockI;
+	}
 	public Indicateur getStockQBas() {
 		return this.stockQBas;
 	}
@@ -409,8 +419,8 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 	
 	protected void setStockAffichage() {
 		calculCoeffStock();
-		addStockQM( (int) (getCoeffSolde()*MOY_QM));
-		addStockQB( (int) (getCoeffSolde()*MOY_QB));
+		addStockQM( (int) (getCoeffStock()*MOY_QM));
+		addStockQB( (int) (getCoeffStock()*MOY_QB));
 	}
 	
 	
@@ -418,10 +428,10 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 	/* Code par Guillaume SALLE + Agathe CHEVALIER */
 	public void next() {
 		retireSolde(coutFixe);
-		this.getJournal().ajouter("Quantité vendue Basse Qualite ="+getTotalVenteQB());
-		this.getJournal().ajouter("Quantité vendue Moyenne Qualité ="+getTotalVenteQM());
-		this.getJournal().ajouter("Quantité basse qualité = "+ getStockQB());
-		this.getJournal().ajouter("Quantité moyenne qualité ="+ getStockQM());
+		this.getJournal().ajouter("Quantité vendue basse qualité ="+getTotalVenteQB());
+		this.getJournal().ajouter("Quantité vendue moyenne qualité ="+getTotalVenteQM());
+		this.getJournal().ajouter("Stock basse qualité = "+ getStockQB());
+		this.getJournal().ajouter("Stock moyenne qualité ="+ getStockQM());
 		this.getJournal().ajouter("Solde ="+getSolde()+" €");
 		this.getJournal().ajouter("Coefficient de la météo ="+ getCoeffMeteo());
 		this.getJournal().ajouter("Liste des coefficients d'instabilité de nos Pays : " + Arrays.toString(getListeInstabilite()));
@@ -439,11 +449,13 @@ public class Eq2PROD implements Acteur, IVendeurFevesProd, IVendeurFeveV4 {
 		}
 		this.getJournalOccasionel().ajouter("------------------------------------------------------------------------------");
 		setStockAffichage();
+		setQuantiteEq3(false); 
 		indicateurQB.setValeur(this, getStockQB());
 		indicateurQM.setValeur(this, getStockQM());
 		soldejournal.setValeur(this, getSolde());
 		meteoI.setValeur(this, getCoeffMeteo());
 		instabiliteI.setValeur(this, getCoeffInstabilite());
+		coeffstockI.setValeur(this, getCoeffSolde());
 		razTotalVenteQB();
 		razTotalVenteQM();
 	}

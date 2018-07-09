@@ -333,7 +333,7 @@ public class Eq4TRAN implements Acteur {
 				 */
 				Acteur a;
 				
-				if(contratPoudreEnCours.get(i).isReponse()) {
+				if(contratPoudreEnCours.get(i).getReponse()) {
 					for(int j=0;j<=2;j++) {
 						if (contratPoudreEnCours.get(i).getQualite() == j) {
 							if(i<3) a = Monde.LE_MONDE.getActeur("Eq5TRAN");
